@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ViralHub</title>
+<link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="live.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="device">
+  <span class="btn-side"></span>
+  <div class="screenwrap" id="app">
+    <div class="island"><i></i></div>
+
+    <aside class="desktop-sidebar" aria-label="Main navigation">
+      <button class="desktop-brand" onclick="navTo('home')" aria-label="ViralHub home">Viral<span>Hub</span><i>●</i></button>
+      <button class="desktop-search" onclick="navTo('discover')">${SEARCH}<span>Discover creators</span></button>
+      <nav class="desktop-menu">
+        <button data-route="home" onclick="navTo('home')">${home}<span>For You</span></button>
+        <button data-route="discover" onclick="navTo('discover')">${compass}<span>Explore</span></button>
+        <button class="desktop-create" data-route="create" onclick="go('create')" aria-label="Create" title="Create"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+        <button data-route="inbox" onclick="navTo('inbox')">${BELL}<span>Inbox</span><span class="inbox-badge" data-inbox-badge hidden></span></button>
+        <button data-route="profile" onclick="navTo('profile')">${user}<span>Profile</span></button>
+      </nav>
+      <div class="desktop-side-footer">
+        <button data-route="settings" onclick="go('settings')">${GEAR}<span>Settings</span></button>
+        <p>A little scroll.<br>A new perspective.</p>
+        <small>VIRALHUB · YOUR WORLD, YOUR CONTENT</small>
+      </div>
+    </aside>
+
+    <!-- ========== LOGIN ========== -->
+    <section class="screen active" id="login">
+      <div class="auth">
+        <h1 class="brand"><span>Viral</span>Hub</h1>
+        <p class="tagline">Your world. Your content.</p>
+        <div class="field">
+          <label for="lu">Username or email</label>
+          <input class="input" id="lu" placeholder="Enter your username">
+        </div>
+        <div class="field">
+          <label for="lp">Password</label>
+          <div class="pw">
+            <input class="input" id="lp" type="password" placeholder="Enter your password">
+            <button class="eye" data-eye="lp" aria-label="Show password">${EYE}</button>
+          </div>
+        </div>
+        <button class="cta" onclick="login()">Log in</button>
+        <div class="or">or</div>
+        <button class="ghost" onclick="go('signup')">Create account</button>
+        
+      </div>
+    </section>
+
+    <!-- ========== SIGNUP ========== -->
+    <section class="screen" id="signup">
+      <div class="topback"><button onclick="go('login')" aria-label="Back">${BACK}</button> Back</div>
+      <div class="auth">
+        <h1 class="brand" style="text-align:left;font-size:32px">Join <span>ViralHub</span></h1>
+        <p class="tagline" style="text-align:left;margin-bottom:30px">
+          Create your account and start sharing
+        </p>
+        <div class="field">
+          <label for="sfn">First Name</label>
+          <input class="input" id="sfn" type="text" placeholder="Enter your first name">
+        </div>
+
+        <div class="field">
+          <label for="sln">Last Name</label>
+          <input class="input" id="sln" type="text" placeholder="Enter your last name">
+        </div>
+        <div class="field">
+          <label for="su">Username</label>
+          <input class="input" id="su" placeholder="Choose a username">
+        </div>
+        <div class="field">
+          <label for="se">Email</label>
+          <input class="input" id="se" type="email" placeholder="your@email.com">
+        </div>
+        <div class="field">
+          <label for="sp">Password</label>
+          <div class="pw">
+            <input class="input" id="sp" type="password" placeholder="Create a strong password">
+            <button class="eye" data-eye="sp" aria-label="Show password">${EYE}</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Date of birth</label>
+          <div class="dob">
+            <select class="input" id="mm"><option value="">Month</option></select>
+            <select class="input" id="dd"><option value="">Day</option></select>
+            <select class="input" id="yy"><option value="">Year</option></select>
+          </div>
+        </div>
+        <button class="terms" id="terms" onclick="this.classList.toggle('on')">
+          <span class="box">${CHECK}</span>
+          <span>I agree to the <b class="linkish">Terms of Service</b> and <b class="linkish">Privacy Policy</b></span>
+        </button>
+        <button class="cta" onclick="signup()">Create account</button>
+        <p class="smallnote">Already have an account? <b class="linkish" onclick="go('login')">Log in</b></p>
+      </div>
+    </section>
+
+    <!-- ========== HOME FEED ========== -->
+    <section class="screen" id="home">
+      <div class="feedtabs" id="feedtabs">
+        <button class="on" data-tab="foryou">For you</button>
+        <button data-tab="friends">Friends</button>
+        <button class="live" data-tab="live">Live</button>
+        <span class="tabink" id="tabink"></span>
+      </div>
+      <button class="gear" onclick="go('settings')" aria-label="Settings">${GEAR}</button>
+      <div class="feed" id="feed"></div>
+      <div class="emptyfeed" id="emptyFriends">
+        <h4>No posts from friends yet</h4>
+        <p>When people you follow follow you back, their videos land here.</p>
+        <button class="cta" style="width:auto;padding:12px 26px" onclick="go('discover')">Find creators</button>
+      </div>
+      <div class="emptyfeed" id="emptyLive">
+        <h4>Nobody is live right now</h4>
+        <p>Start your own stream or check back to watch a creator.</p>
+        <button class="cta" style="width:auto;padding:12px 26px" onclick="go('create');setSeg(1)">Go live</button>
+      </div>
+      <div id="liveDirectory" class="vl-directory" hidden></div>
+      <nav class="nav onvideo" data-nav="home"></nav>
+    </section>
+
+    <!-- ========== DISCOVER ========== -->
+    <section class="screen" id="discover">
+      <div class="hdr" style="padding-bottom:16px"><div class="sp"></div></div>
+      <div class="scroll">
+        <div class="search">${SEARCH}<input placeholder="Search creators, sounds, tags" oninput="filterCreators(this.value)"></div>
+        <h2 class="sec">${TREND} Trending</h2>
+        <div class="tags" id="tagbox"></div>
+        <h2 class="sec">Popular creators</h2>
+        <div id="creatorlist"></div>
+        <h2 class="sec" style="margin-top:22px">Trending videos</h2>
+        <div class="vidgrid" id="trendgrid"></div>
+      </div>
+      <nav class="nav" data-nav="discover"></nav>
+    </section>
+
+    <!-- ========== CREATE ========== -->
+    <section class="screen" id="create">
+      <div class="hdr"><button onclick="back()" aria-label="Back">${BACK}</button> Create</div>
+      <div class="segs" id="segs">
+        <button class="on" onclick="setSeg(0)">${UPLOAD} Upload video</button>
+        <button onclick="setSeg(1)">${LIVE} Go live</button>
+        <span class="ink" id="segink"></span>
+      </div>
+      <div class="scroll">
+        <div id="seg0">
+          <button class="drop" type="button"
+             onclick="document.getElementById('videoFile').click()">
+
+              ${IMGPLUS}
+
+            <b id="videoFileName">Tap to select a video</b>
+
+            <span>or choose a video from your device</span>
+
+            <small>MP4 or MOV</small>
+          </button>
+
+          <input
+            type="file"
+            id="videoFile"
+            accept="video/mp4,video/quicktime,video/*"
+             style="display:none"
+             onchange="videoSelected()">
+          <div class="blk"><h4>Caption</h4>
+            <textarea
+              class="input"
+              id="videoCaption"
+              placeholder="Write a caption for your video">
+            </textarea>
+          </div>
+          <div id="selectedSound" class="selected-sound" hidden><div><small>SELECTED SOUND</small><b></b><p>Your original audio will be replaced by this sound.</p></div><button onclick="Social.clearSelectedSound()" aria-label="Remove selected sound">${X}</button></div>
+          <div class="blk">
+            <button
+              class="cta"
+              id="postVideoBtn"
+              onclick="uploadVideo()">
+
+               ${CAM} Post video
+            </button>
+          </div>
+        </div>
+        <div id="seg1" style="display:none">
+          <div class="vl-preview">
+            <video id="livePreview" autoplay muted playsinline></video>
+            <div id="previewEmpty">Your camera preview appears here</div>
+            <span class="vl-badge">PREVIEW</span>
+          </div>
+          <p id="liveSetupStatus" class="vl-message" role="status">Enable your camera and microphone to get ready.</p>
+          <div class="vl-toolbar">
+            <button id="enableLiveCamera" onclick="Live.preview()">Enable camera</button>
+            <button id="previewCamToggle" onclick="Live.toggleMedia('video')" disabled aria-pressed="true">Camera on</button>
+            <button id="previewMicToggle" onclick="Live.toggleMedia('audio')" disabled aria-pressed="true">Mic on</button>
+            <button onclick="Live.flipCamera()" id="previewFlip" disabled>Flip camera</button>
+          </div>
+          <div class="blk"><h4><label for="liveTitleInput">Stream title</label></h4>
+            <input class="input" id="liveTitleInput" maxlength="100" placeholder="What are you streaming about?">
+          </div>
+          <div class="blk"><h4>Category</h4><div class="cats" id="cats"></div></div>
+          <p class="fine">Your stream is public to signed-in users. Your recording is saved privately to Past Livestreams. Keep this tab open while streaming.</p>
+          <div class="blk"><button class="cta" id="startLiveButton" onclick="Live.start()">${LIVE} Go live now</button></div>
+          <p class="fine">By going live you agree to our <b class="linkish">Community Guidelines</b>.</p>
+        </div>
+      </div>
+      <nav class="nav" data-nav="create"></nav>
+    </section>
+
+    <!-- ========== PROFILE ========== -->
+    <section class="screen" id="profile">
+      <div class="hdr">
+        <span id="profileUsername">Loading...</span>
+        <div class="sp"></div>
+
+        <button class="gear" 
+                style="position:static" 
+                onclick="go('settings')" 
+                aria-label="Settings">
+            ${GEAR}
+        </button>
+      </div>
+
+      <div class="scroll">
+        <div class="phead">
+          <div class="ptop">
+            <div class="pav">
+              <div
+                  id="profileAvatar"
+                  style="background:linear-gradient(140deg,#4a6b8a,#2d3b52)">
+              </div>
+            </div>
+            <div class="stats">
+
+                <button
+                    class="stat"
+                    onclick="openList('following')">
+
+                    <b id="profileFollowingCount">0</b>
+                    <span>Following</span>
+
+                </button>
+
+                <button
+                    class="stat"
+                    onclick="openList('followers')">
+
+                    <b id="profileFollowerCount">0</b>
+                    <span>Followers</span>
+
+                </button>
+
+                <button
+                    class="stat"
+                    onclick="openList('friends')">
+
+                    <b id="profileFriendsCount">0</b>
+                    <span>Friends</span>
+
+                </button>
+
+            </div>
+          </div>
+          <h2 class="pname" id="profileFullName">Loading...</h2>
+          <p class="pbio">
+            <b id="profileBio">Loading...</b>
+          </p>
+          <button class="editbtn" 
+                  onclick="go('settings')">
+              Edit profile
+          </button>
+        </div>
+        <div class="ptabs" id="ptabs">
+          <button class="on" onclick="setPTab(0)" aria-label="Posts">${GRID}</button>
+          <button onclick="setPTab(1)" aria-label="Liked">${HEART}</button>
+          <span class="ink" id="ptabink"></span>
+        </div>
+        <div id="ptab0" class="grid3"></div>
+        <div id="ptab1" class="grid3" style="display:none"></div>
+      </div>
+      <nav class="nav" data-nav="profile"></nav>
+    </section>
+
+    <section class="screen" id="soundPage">
+      <div class="hdr"><button onclick="back()" aria-label="Back">${BACK}</button>Original sound</div>
+      <div class="scroll sound-page">
+        <div class="sound-hero"><div class="sound-art">${note}</div><div><p class="sound-eyebrow">MAKE IT YOUR OWN</p><h2 id="soundTitle">Original sound</h2><p id="soundCreator"></p><p id="soundUseCount"></p></div></div>
+        <audio id="soundPlayer" controls loop preload="metadata"></audio>
+        <div class="sound-actions"><button class="cta" id="useSound" onclick="Social.useSound()">Use this sound</button><button id="saveSound" onclick="Social.saveSound()">Save sound</button></div>
+        <p id="soundStatus" role="status"></p><h3>Videos using this sound</h3><div class="vidgrid" id="soundVideos"></div>
+      </div><nav class="nav" data-nav="discover"></nav>
+    </section>
+
+    <section class="screen" id="savedSounds"><div class="hdr"><button onclick="back()" aria-label="Back">${BACK}</button>Saved sounds</div><div class="scroll" id="savedSoundList"></div></section>
+    <!-- ========== INBOX ========== -->
+    <section class="screen" id="inbox">
+      <div class="hdr"><button onclick="back()" aria-label="Back">${BACK}</button>Inbox</div>
+      <div class="scroll inbox-page">
+        <div class="inbox-toolbar"><div><h2>Your activity</h2><p id="inboxUnread">All caught up</p></div><button onclick="Alerts.refresh()" aria-label="Refresh inbox">↻</button><button id="inboxMarkAll" onclick="Alerts.markAll()">Mark all as read</button></div>
+        <div class="activity-filters"><button class="on" data-activity-filter="all" onclick="Alerts.setFilter('all')">All</button><button data-activity-filter="follow" onclick="Alerts.setFilter('follow')">Followers</button><button data-activity-filter="comment" onclick="Alerts.setFilter('comment')">Comments</button><button data-activity-filter="reply" onclick="Alerts.setFilter('reply')">Replies</button></div>
+        <div id="inboxList" aria-live="polite"></div><button id="inboxMore" class="inbox-more" onclick="Alerts.more()" hidden>Load older activity</button>
+      </div>
+      <nav class="nav" data-nav="inbox"></nav>
+    </section>
+
+    <!-- ========== CREATOR PROFILE ========== -->
+    <section class="screen" id="creator">
+      <div class="hdr"><button onclick="back()" aria-label="Back">${BACK}</button><span id="cTitle">Creator</span><div class="sp"></div>
+        <button
+          onclick="reportCurrentCreator()"
+          aria-label="Report">
+          ${FLAG}
+      </button>
+      </div>
+      <div class="scroll">
+        <div class="banner" id="cBanner"></div>
+        <div class="cprof">
+          <div class="avwrap">
+            <div class="cav" id="cAv"></div>
+            <div class="cactions">
+              <button
+                class="follow"
+                id="cFollow"
+                type="button">
+                   Follow
+              </button>
+              <button 
+                class="follow yes" 
+                onclick="toast
+                ('Messages coming soon')">
+                Message
+              </button>
+              <button
+                  class="follow"
+                  id="cBlock"
+                  onclick="toggleBlockCurrentCreator()">
+                  Block
+              </button>
+            </div>
+          </div>
+          <h2 class="pname" id="cName" style="display:flex;align-items:center;gap:6px"></h2>
+          <p style="margin:0 0 4px;font-size:13px;color:var(--text-dim)" id="cHandle"></p>
+          <p class="pbio" id="cBio" style="margin-top:8px"></p>
+          <div class="cstats" id="cStats"></div>
+        </div>
+        <div class="grid3" id="cGrid"></div>
+      </div>
+      <nav class="nav" data-nav=""></nav>
+    </section>
+
+    <!-- ========== SETTINGS ========== -->
+    <section class="screen" id="settings">
+      <div class="hdr"><button onclick="back()" aria-label="Back">${BACK}</button> Settings</div>
+      <div class="scroll">
+        <div class="setblk">
+          <h3>Account</h3><p class="cap">Manage your personal information</p>
+          <div class="acccard">
+            <div class="av" style="background:linear-gradient(140deg,#4a6b8a,#2d3b52)"></div>
+            <div class="bd">
+               <b id="settingsFullName">Loading...</b>
+               <span id="settingsHandle">@Loading...</span>
+            </div>
+            <button class="ed" onclick="toast('Editing profile')">Edit ${CHEV}</button>
+          </div>
+          <div class="profile-picture-editor">
+
+            <div class="settings-avatar-wrap">
+
+              <img
+                  id="settingsProfilePicture"
+                  class="settings-profile-picture"
+                  alt="Profile picture">
+
+            <div
+                 id="settingsProfileFallback"
+                class="settings-profile-fallback">
+            👤
+            </div>
+
+            </div>
+
+              <input
+                type="file"
+                id="profilePictureInput"
+                accept="image/jpeg,image/png,image/webp"
+                style="display:none"
+                onchange="profilePictureSelected()">
+
+              <button
+                type="button"
+                class="follow"
+                onclick="document.getElementById('profilePictureInput').click()">
+                    Change photo
+              </button>
+
+
+              </div>
+          <div class="field">
+            <label for="sBio">Bio</label>
+
+            <textarea
+              class="input"
+              id="sBio"
+              maxlength="150"
+              placeholder="Tell people about yourself"
+              rows="3"></textarea>
+
+            <small id="bioCounter">0 / 150</small>
+          </div>
+          <div class="field">
+            <label for="s1">Username</label>
+            <input class="input" id="s1" value="">
+          </div>
+          <div class="field">
+            <label for="s2">Email</label>
+            <input class="input" id="s2" value="">
+          </div>
+          <div class="field">
+            <label for="s3">Password</label>
+            <div class="pw">
+              <input class="input" id="s3" type="password" value="" placeholder="••••••••">
+              <button class="eye" data-eye="s3" aria-label="Show password">${EYE}</button>
+            </div>
+          </div>
+          <div class="field">
+              <label for="s4">Phone Number (optional)</label>
+              <input
+                 class="input"
+                 id="s4"
+                 type="tel"
+                value=""
+                placeholder="Enter your phone number">
+          </div>
+          <div class="field">
+            <label for="s5">Date of birth</label>
+            <input class="input" id="s5" type="date" value="">
+          </div>
+          <button class="cta" onclick="saveProfileChanges()">Save changes</button>
+
+          <h3>Display</h3><p class="cap">Customize your appearance</p>
+          <div class="toggleRow">
+            <span style="color:var(--cyan)">${MOON}</span>
+            <div class="bd"><b>Dark mode</b><span>Easy on the eyes</span></div>
+            <button class="sw on" id="sw" onclick="toggleTheme()" aria-label="Toggle dark mode"><i></i></button>
+          </div>
+          <div class="themes">
+            <button class="theme dark on" id="thDark" onclick="setTheme('dark')">
+              <div class="mock"><i style="width:70%"></i><i style="width:45%"></i></div><b>Dark</b></button>
+            <button class="theme light" id="thLight" onclick="setTheme('light')">
+              <div class="mock"><i style="width:70%"></i><i style="width:45%"></i></div><b>Light</b></button>
+          </div>
+        </div>
+        <div class="setblk"><h3>Livestreams</h3><p class="cap">Your moments, saved for you</p>
+          <button class="settings-row" onclick="Social.openSavedSounds()"><span>Saved sounds</span><span>›</span></button>
+          <button class="settings-row" onclick="Live.openArchive()"><span>Past Livestreams</span><span>›</span></button></div>
+        <p class="lbl-sm">Account actions</p>
+       <div class="setblk">
+            <h3>Privacy</h3>
+            <p class="cap">Manage the accounts you have blocked</p>
+
+            <button
+                class="settings-row"
+                type="button"
+                onclick="openBlockedAccounts()">
+                <span>Blocked Accounts</span>
+                <span>›</span>
+            </button>
+        </div>
+        <div class="setblk">
+          <button class="dangerbtn" onclick="logout()">Log out</button>
+          <button class="dangerbtn red" onclick="toast('Contact the project owner to delete your account')">Delete account</button>
+        </div>
+        <div style="height:30px"></div>
+      </div>
+    </section>
+
+    <section class="screen" id="liveRoom">
+      <div class="hdr"><button onclick="Live.leave()" aria-label="Leave livestream">${BACK}</button><span id="liveRoomTitle">Livestream</span><button onclick="Live.share()" aria-label="Share livestream">${LINK}</button></div>
+      <div class="vl-room-body">
+        <div class="vl-stage">
+          <video id="liveVideo" autoplay playsinline></video>
+          <div class="vl-stage-top"><span id="liveBadge" class="vl-badge">LIVE</span><span id="liveTimer">00:00</span><span id="liveViewerCount">0 viewers</span></div>
+          <div id="liveHearts" aria-hidden="true"></div>
+          <button id="livePlay" class="vl-play" onclick="Live.playVideo()" hidden>Tap to watch with sound</button>
+          <button id="liveReconnect" class="vl-play" onclick="Live.reconnect()" hidden>Reconnect</button>
+          <p id="liveConnection" class="vl-connection" role="status"></p>
+        </div>
+        <div class="vl-panel">
+          <div class="vl-info"><b id="liveHostHandle"></b><span id="liveCategory"></span></div>
+          <div class="vl-toolbar" id="hostLiveControls" hidden>
+            <button id="roomCamToggle" onclick="Live.toggleMedia('video')" aria-pressed="true">Camera on</button>
+            <button id="roomMicToggle" onclick="Live.toggleMedia('audio')" aria-pressed="true">Mic on</button>
+            <button onclick="Live.flipCamera()">Flip camera</button>
+            <button onclick="Live.showMuted()">Muted viewers</button>
+            <button class="vl-end" id="endLiveButton" onclick="Live.end()">End live</button>
+          </div>
+          <div id="mutedLiveList" class="vl-toolbar vl-message" hidden></div>
+          <p id="recordingStatus" class="vl-message" role="status"></p>
+          <div class="vl-chat-header"><b>Live chat</b><button id="liveHeartButton" onclick="Live.heart()" aria-label="Send a heart. Tap repeatedly to send more.">♥ <span id="liveLikeCount">0</span></button></div>
+          <div id="liveChat" class="vl-chat" role="log" aria-label="Live comments" aria-live="polite"></div>
+          <form class="vl-comment-form" id="liveCommentForm" onsubmit="event.preventDefault();Live.comment()">
+            <label class="vl-sr-only" for="liveCommentInput">Comment</label><input id="liveCommentInput" maxlength="300" placeholder="Say something nice…" autocomplete="off"><button id="liveSendComment" type="submit">Send</button>
+          </form>
+        </div>
+      </div>
+    </section>
+    <section class="screen" id="pastLivestreams">
+      <div class="hdr"><button onclick="go('settings')" aria-label="Back to settings">${BACK}</button>Past Livestreams<button onclick="Live.loadArchive()" aria-label="Refresh past livestreams">↻</button></div>
+      <div class="scroll"><div class="vl-archive-intro"><h2>Your live moments</h2><p>Private recordings, saved after you finish.</p></div><div id="pastLiveList" class="vl-archive-list"></div></div>
+    </section>
+    <section class="screen" id="liveReplay">
+      <div class="hdr"><button onclick="Live.closeReplay()" aria-label="Back to past livestreams">${BACK}</button><span id="replayTitle">Replay</span></div>
+      <div class="scroll vl-replay"><video id="replayVideo" controls playsinline></video><p id="replayStatus" role="status"></p><button class="cta" id="downloadReplay" onclick="Live.downloadReplay()" hidden>Download recording</button></div>
+    </section>
+    <button id="returnToLive" class="vl-return" onclick="go('liveRoom')" hidden>● You're live · Return to stream</button>
+
+    <!-- ========== BLOCKED ACCOUNTS ========== -->
+
+    <section class="screen" id="blockedAccounts">
+
+        <div class="hdr">
+
+            <button
+                onclick="back()"
+                aria-label="Back">
+                ←
+            </button>
+
+            <span>Blocked Accounts</span>
+
+            <div class="sp"></div>
+
+        </div>
+
+
+        <div class="scroll">
+
+            <div class="blocked-info">
+                Accounts you block will not appear normally in your feed.
+                You can unblock them here at any time.
+            </div>
+
+            <div id="blockedAccountsList">
+
+                <div class="blocked-empty">
+                    Loading blocked accounts...
+                </div>
+
+            </div>
+
+        </div>
+
+        <nav class="nav" data-nav=""></nav>
+
+    </section>
+
+    <!-- ========== SHEETS ========== -->
+    <div class="scrim" id="scrim" onclick="closeSheets()"></div>
+
+    <div class="sheet" id="sheet-comments">
+      <div class="grab"></div>
+      <div class="sh"><b id="cmtCount">0 comments</b><button onclick="closeSheets()" aria-label="Close">${X}</button></div>
+      <div class="sb" id="cmtList"></div>
+      <div id="replyContext" class="reply-context" hidden><span></span><button onclick="Social.cancelReply()" aria-label="Cancel reply">${X}</button></div>
+      <div class="cmtbar">
+        <div class="av" style="background:linear-gradient(140deg,#4a6b8a,#2d3b52)"></div>
+        <input id="cmtInput" maxlength="1000" placeholder="Add a comment" onkeydown="if(event.key==='Enter')sendComment()">
+        <button class="send" id="commentSend" onclick="sendComment()" aria-label="Send">${SEND}</button>
+      </div>
+    </div>
+
+    <!-- =====================================
+                REPORT SHEET
+    ===================================== -->
+
+  <div class="sheet" id="sheet-report">
+
+      <div class="grab"></div>
+
+      <div class="sh">
+
+          <b>Report</b>
+
+          <button
+              onclick="closeSheets()"
+              aria-label="Close">
+              ${X}
+          </button>
+
+      </div>
+
+      <div class="sb">
+
+          <p id="reportTargetText">
+              Why are you reporting this?
+          </p>
+
+          <div class="report-options">
+
+              <button
+                  type="button"
+                  onclick="selectReportReason(this, 'Spam')">
+                  Spam
+              </button>
+
+              <button
+                  type="button"
+                  onclick="selectReportReason(this, 'Harassment or bullying')">
+                  Harassment or bullying
+              </button>
+
+              <button
+                  type="button"
+                  onclick="selectReportReason(this, 'Hate speech')">
+                  Hate speech
+              </button>
+
+              <button
+                  type="button"
+                  onclick="selectReportReason(this, 'Violence or dangerous content')">
+                  Violence or dangerous content
+              </button>
+
+              <button
+                  type="button"
+                  onclick="selectReportReason(this, 'False information')">
+                  False information
+              </button>
+
+              <button
+                  type="button"
+                  onclick="selectReportReason(this, 'Other')">
+                  Other
+              </button>
+
+          </div>
+
+          <textarea
+              class="input"
+              id="reportDetails"
+              maxlength="500"
+              placeholder="Additional details (optional)">
+          </textarea>
+
+          <button
+              class="cta"
+              type="button"
+              onclick="submitReport()">
+              Submit report
+          </button>
+
+      </div>
+
+  </div>
+
+    <div class="sheet" id="sheet-share">
+      <div class="grab"></div>
+      <div class="sh"><b>Share</b><button onclick="closeSheets()" aria-label="Close">${X}</button></div>
+      <div class="sb">
+        <button class="shopt" onclick="toast('Use the Share button on a video');closeSheets()"><span class="ic">${LINK}</span><span><b>Copy link</b></span></button>
+        <button class="shopt red" onclick="toast('Open a video or creator to report it');closeSheets()"><span class="ic">${FLAG}</span><span><b>Report video</b><small>Flag inappropriate content</small></span></button>
+      </div>
+    </div>
+
+    <div class="sheet" id="sheet-list">
+      <div class="grab"></div>
+      <div class="sh"><b id="listTitle">Followers</b><button onclick="closeSheets()" aria-label="Close">${X}</button></div>
+      <div class="sb" id="listBody"></div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js"></script>
+
+<script src="supabase.js"></script>
+
+<script src="social.js"></script>
+<script src="alerts.js"></script>
+<script src="script.js"></script>
+<script src="live-config.js"></script>
+<script src="live.js"></script>
+
+</body>
+</html>
